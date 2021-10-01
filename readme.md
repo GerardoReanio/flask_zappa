@@ -1,29 +1,52 @@
 
-1.virtualenv iland-env --python=python3.8
-
-2.source env-iland/bin/activate
-
-3.pip install flask==2.0.1
+Deploy Landing Page en AWS con Flask y Zappa en 10 minutos
+==================
 
 
-4. nano env-iland/bin/activate
+```sh 
+> virtualenv iland-env --python=python3.8
+> source env-iland/bin/activate
+> pip install flask==2.0.1
+> nano env-iland/bin/activate
+```
 
-    agregar
+#### Agregar estas variables en el archivo 'activate' del virtualenv
+
 
     export FLASK_APP=app
     export FLASK_ENV=development
 
-5. deactivate y luego source env-iland/bin/activate
+```sh 
+> deactivate
+> source env-iland/bin/activate
+> touch app.py
+```
 
-6.touch app.py
-    add hw for flask
+#### Agregamos el codigo del hello world de flask y hacemos un flask run
 
-7. test up flask app with flask run
 
-8. mkdir static
-    mkdir templates
+```sh 
+> flask run 
+ * Serving Flask app 'app' (lazy loading)
+ * Environment: development
+ * Debug mode: on
+ * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 864-880-344
 
-9. reemplazar las rutas de los archivos estaticos 
+```
+
+#### Crear las carpetas para los archivos estáticos y templates.
+
+```sh 
+> mkdir static
+> mkdir templates
+```
+
+
+### Reemplazar las rutas de los archivos estaticos 
+En el archivo index.html
 
     ejemplo : 
 
@@ -31,11 +54,18 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }} ">
 
-10. pip install zappa==0.53.0
+### Instalamos zappa
 
-11. flask run 
+```sh 
+> pip install zappa==0.53.0
+```
 
-Si se lanza un error al ejecutar nuevamente el flask run 
+### Validamos la instalación de zappa 
+Validamos si la instalación no generó algun conflico con flask
+
+```sh 
+> flask run 
+
 
 Traceback (most recent call last):
   File "/Users/workstation/Desktop/Publicaciones/flask+zappa/env-iland/bin/flask", line 5, in <module>
@@ -46,11 +76,14 @@ Traceback (most recent call last):
     from werkzeug.local import ContextVar
 ImportError: cannot import name 'ContextVar' from 'werkzeug.local' (/Users/workstation/Desktop/Publicaciones/flask+zappa/env-iland/lib/python3.9/site-packages/werkzeug/local.py)
 
-12. pip uninstall werkzeug
-    pip install werkzeug==2.0.1
+```
 
+## Solución al conflicto entre zappa y flask
 
-13. flask run OK 
+```sh 
+> pip uninstall werkzeug
+> pip install werkzeug==2.0.1
+> flask run
 
  * Serving Flask app 'app' (lazy loading)
  * Environment: development
@@ -60,7 +93,11 @@ ImportError: cannot import name 'ContextVar' from 'werkzeug.local' (/Users/works
  * Debugger is active!
  * Debugger PIN: 864-880-344
 
-14. zappa init
+``` 
+
+## Flask y Zappa nuevamente amigos :) 
+
+```sh
 
 zappa init
 
@@ -124,8 +161,12 @@ and stop by our Slack channel here: https://zappateam.slack.com
 
 Enjoy!,
  ~ Team Zappa!
+```
 
- 15. zappa deploy dev
+### Configuración zappa lista, a deployar 
+
+```sh 
+> zappa deploy dev
 
 Creating 1-flask-zappa-dev-ZappaLambdaExecutionRole IAM Role..
 Creating zappa-permissions policy on 1-flask-zappa-dev-ZappaLambdaExecutionRole IAM Role.
@@ -156,8 +197,11 @@ Traceback (most recent call last):
     self.cf_template.add_description("Automatically generated with Zappa")
 AttributeError: 'Template' object has no attribute 'add_description'
 
+```
+### Conflicto con el paquete troposphere con al momento de desplegar 
 
-16. pip install troposphere==2.7.1
+```sh 
+> pip install troposphere==2.7.1
 
  ERROR: Command errored out with exit status 1:
      command: /Users/workstation/Desktop/Publicaciones/flask+zappa/iland-env/bin/python -c 'import io, os, sys, setuptools, tokenize; sys.argv[0] = '"'"'/private/var/folders/pk/rpqbgv7n5y51srp__p414d7h0000gn/T/pip-install-ldm5xxkh/troposphere_3aa84eabb63f461f97e8462613beb98b/setup.py'"'"'; __file__='"'"'/private/var/folders/pk/rpqbgv7n5y51srp__p414d7h0000gn/T/pip-install-ldm5xxkh/troposphere_3aa84eabb63f461f97e8462613beb98b/setup.py'"'"';f = getattr(tokenize, '"'"'open'"'"', open)(__file__) if os.path.exists(__file__) else io.StringIO('"'"'from setuptools import setup; setup()'"'"');code = f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' egg_info --egg-base /private/var/folders/pk/rpqbgv7n5y51srp__p414d7h0000gn/T/pip-pip-egg-info-b7davptx
@@ -168,12 +212,16 @@ AttributeError: 'Template' object has no attribute 'add_description'
 WARNING: Discarding https://files.pythonhosted.org/packages/a7/f5/b066cea6022142792207d356d9183b3812d01e27910023438f354aa98b43/troposphere-2.7.1.tar.gz#sha256=ea2e5f2f82c224eaa1414a008b1939aae124c3e3e1dd993301968f155b333bd7 (from https://pypi.org/simple/troposphere/) (requires-python:>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*). Command errored out with exit status 1: python setup.py egg_info Check the logs for full command output.
 ERROR: Could not find a version that satisfies the requirement troposphere==2.7.1 (from versions: 0.1.2, 0.2.0, 0.3.0, 0.3.2, 0.3.3, 0.3.4, 0.4.0, 0.5.0, 0.6.0, 0.6.1, 0.6.2, 0.7.0, 0.7.1, 0.7.2, 1.0.0, 1.1.0, 1.1.1, 1.1.2, 1.2.0, 1.2.1, 1.2.2, 1.3.0, 1.4.0, 1.5.0, 1.6.0, 1.7.0, 1.8.0, 1.8.1, 1.8.2, 1.9.0, 1.9.1, 1.9.2, 1.9.3, 1.9.4, 1.9.5, 1.9.6, 2.0.0, 2.0.1, 2.0.2, 2.1.0, 2.1.1, 2.1.2, 2.2.0, 2.2.1, 2.2.2, 2.3.0, 2.3.1, 2.3.2, 2.3.3, 2.3.4, 2.4.0, 2.4.1, 2.4.2, 2.4.3, 2.4.4, 2.4.5, 2.4.6, 2.4.7, 2.4.8, 2.4.9, 2.5.0, 2.5.1, 2.5.2, 2.5.3, 2.6.0, 2.6.1, 2.6.2, 2.6.3, 2.6.4, 2.7.0, 2.7.1, 3.0.0, 3.0.1, 3.0.2, 3.0.3)
 ERROR: No matching distribution found for troposphere==2.7.1
+```
 
-17. SOLVE point 16
-pip install setuptools==57.5.0
-pip install troposphere==2.7.1
+### Si al intentar instalar troposphere falla, instalamos la versión de setuptolls==57.5.0
 
-18.zappa deploy dev
+
+```sh
+> pip install setuptools==57.5.0
+> pip install troposphere==2.7.1
+> zappa deploy dev
+
 (Werkzeug 2.0.1 (/Users/workstation/Desktop/Publicaciones/flask+zappa/iland-env/lib/python3.8/site-packages), Requirement.parse('Werkzeug<1.0'), {'zappa'})
 Calling deploy for stage dev..
 Creating flask-zappa-dev-ZappaLambdaExecutionRole IAM Role..
@@ -193,4 +241,7 @@ Uploading flask-zappa-dev-template-1632468259.json (1.6KiB)..
 Waiting for stack flask-zappa-dev to create (this can take a bit)..
  75%|███████████████████████████████████████████████████████████████████████████████████████████████▎                               | 3/4 [00:14<00:04,  4.72s/res]
 Deploying API Gateway..
+
 Deployment complete!: https://6o5bw0rh5c.execute-api.eu-west-1.amazonaws.com/dev
+
+```
