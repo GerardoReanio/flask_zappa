@@ -1,7 +1,7 @@
 
 Deploy Landing Page en AWS con Flask y Zappa en 10 minutos
 ==================
-[https://www.linkedin.com/posts/gerardo-reanio_flask-zappa-aws-activity-6847935563627073536-qZVl](Ver la publicación en LinkedIn)
+https://www.linkedin.com/posts/gerardo-reanio_flask-zappa-aws-activity-6847935563627073536-qZVl
 
 
 ```sh 
